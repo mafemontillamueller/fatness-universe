@@ -1,0 +1,86 @@
+/* ==========================================================================
+   CRAV clone — styles.css
+   Esta vez: reglas REALES extraídas del CSS compilado del sitio original
+   (font-faces, variables de color, clases custom text-stroke/heading/text*,
+   y el sistema de "sticker peel" con clip-path). El resto de utilidades
+   (flex, grid, absolute, arbitrary values tipo text-[2.8vw], max-md:) las
+   genera Tailwind CDN al vuelo a partir de las clases que ya trae el HTML
+   real (ver index.html) — no hacía falta reescribirlas a mano.
+   ========================================================================== */
+
+/* ---- Fuentes reales (mismas rutas .woff2 del sitio, URLs absolutas) ---- */
+@font-face{font-family:Modak;font-style:normal;font-weight:400;font-display:swap;src:url(https://www.cravburgers.shop/_next/static/media/c35973cbfaf88e87-s.0pxhwty8wp25~.woff2)format("woff2");unicode-range:U+900-97F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09}
+@font-face{font-family:Modak;font-style:normal;font-weight:400;font-display:swap;src:url(https://www.cravburgers.shop/_next/static/media/8eef5a389a468817-s.02i1v5~1n-qbz.woff2)format("woff2");unicode-range:U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Modak;font-style:normal;font-weight:400;font-display:swap;src:url(https://www.cravburgers.shop/_next/static/media/e24507cc2fd99222-s.p.116v.fn8s2.9a.woff2)format("woff2")}
+@font-face{font-family:Mouse Memoirs;font-style:normal;font-weight:400;font-display:swap;src:url(https://www.cravburgers.shop/_next/static/media/de4fe8b8184b9e48-s.0jz8-~q0trhvb.woff2)format("woff2");unicode-range:U+100-2BA,U+2BD-2C5,U+2C7-2CC,U+2CE-2D7,U+2DD-2FF,U+304,U+308,U+329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Mouse Memoirs;font-style:normal;font-weight:400;font-display:swap;src:url(https://www.cravburgers.shop/_next/static/media/1c549cf76d17aa84-s.p.0duk76ik6drf0.woff2)format("woff2")}
+
+/* ---- Variables de color reales (:root del sitio original) ---- */
+:root{
+  --beige:#f5e3cd;
+  --red:#285b82;
+  --white:#fff;
+  --black:#1b1b1b;
+  --mustard:#ffd750;
+  --mustard-dark:#f4a804;
+  --font-modak:"Modak","Modak Fallback";
+  --font-mouse-memoirs:"Mouse Memoirs","Mouse Memoirs Fallback";
+}
+body{background:var(--beige);color:var(--black);font-family:var(--font-mouse-memoirs);margin:0;overflow-x:hidden;}
+img{max-width:100%;}
+
+/* ---- sr-only real (se me había quedado sin definir: por eso el texto
+        "accesible" duplicado se veía en pantalla junto al animado) ---- */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---- Tipografía custom (tamaños base; Tailwind CDN añade los max-md:) ---- */
+.heading600{font-family:var(--font-modak);font-size:35vw}
+.heading300{font-size:15vw;font-family:var(--font-mouse-memoirs)}
+.about-headline{font-size:11.5vw;font-family:var(--font-mouse-memoirs)}
+@media (max-width:768px){ .about-headline{font-size:16vw} }
+
+/* ---- Stickers de la sección About: grandes, encima del texto (como los
+        ingredientes de la sección "Pure quality"), arrancan invisibles/
+        chicos y main.js los revela con fade+scale+rotate al entrar en
+        viewport ---- */
+.about-sticker{opacity:0;transform:scale(.4) rotate(-15deg);z-index:20;filter:drop-shadow(0 .5vw 1vw rgba(0,0,0,.25))}
+.heading180{text-transform:uppercase;font-size:9vw;font-family:var(--font-mouse-memoirs)}
+.text96{font-size:4vw;line-height:1}
+.text40{font-size:1.8vw}
+.text60{font-size:2.8vw}
+@media (max-width:768px){
+  .text96{font-size:8vw}
+  .text40{font-size:5vw}
+  .text60{font-size:6.5vw}
+  .heading180{font-size:14vw}
+  .heading300{font-size:24vw}
+}
+
+/* ---- Contorno grueso tipo sticker (el "fill" lo da text-red/text-mustard/etc) ---- */
+.text-stroke-180{-webkit-text-stroke:1vw var(--white);paint-order:stroke fill}
+.text-stroke-180-mustard{-webkit-text-stroke:1vw #f4a8044d;paint-order:stroke fill}
+.text-stroke-small{-webkit-text-stroke:5px var(--white);paint-order:stroke fill}
+
+.self{padding:8vw 2.5vw}
+@media (max-width:768px){ .self{padding:16vw 4vw} }
+
+/* ---- Sistema de "sticker peel" real (clip-path animado con custom properties) ---- */
+:root{--sticker-rotate:30deg;--sticker-p:20%;--sticker-shadow-opacity:.6;--sticker-lighting-constant:.1;--peel-direction:0deg;--peel-amount:1;--sticker-start:calc(-1 * var(--sticker-p));--sticker-end:calc(100% + var(--sticker-p))}
+.sticker-container{--sticker-peel-y:calc(var(--sticker-start) + var(--peel-amount) * (var(--sticker-end) - var(--sticker-start)));transform:rotate(var(--peel-direction));transform-origin:50%;position:relative}
+.sticker-container *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.sticker-main{clip-path:polygon(var(--sticker-start) var(--sticker-peel-y), var(--sticker-end) var(--sticker-peel-y), var(--sticker-end) var(--sticker-end), var(--sticker-start) var(--sticker-end));will-change:clip-path;filter:url(#dropShadow)}
+.sticker-main>*{transform:rotate(calc(-1 * var(--peel-direction)))}
+.sticker-lighting{filter:url(#pointLight)}
+.sticker-image{transform:rotate(var(--sticker-rotate));width:var(--sticker-width,200px)}
+.flap{width:100%;height:100%;clip-path:polygon(var(--sticker-start) var(--sticker-start), var(--sticker-end) var(--sticker-start), var(--sticker-end) var(--sticker-peel-y), var(--sticker-start) var(--sticker-peel-y));left:0;top:calc(-100% + 2 * var(--sticker-peel-y) - 1px);will-change:clip-path, top;position:absolute;transform:scaleY(-1)}
+.flap>*{transform:rotate(calc(-1 * var(--peel-direction)))}
+.flap-lighting{filter:url(#pointLightFlipped)}
+.flap-image{transform:rotate(var(--sticker-rotate));filter:url(#expandAndFill);width:var(--sticker-width,200px)}
+
+/* ---- Añadidos nuestros para las interacciones (no estaban en el CSS original,
+        los necesitamos para el cursor custom y el preloader) ---- */
+body.cursor-active [data-cursor-hide]{cursor:none}
+#custom-cursor{position:fixed;top:0;left:0;width:38px;height:38px;background:url('logo.png') center/contain no-repeat;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#custom-cursor.hover{width:56px;height:56px}
+[data-reveal]{opacity:0}
+[data-pop]{display:inline-block}
