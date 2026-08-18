@@ -307,8 +307,14 @@ if (window.matchMedia('(pointer: fine)').matches && cursor) {
 
 /* --------------------------------------------------------------------
    7. SCROLL SUAVE — Lenis sincronizado con ScrollTrigger
+   Defensivo: si el CDN de Lenis falla (a veces da 503), no debe tirar
+   abajo el resto del script — simplemente seguimos con scroll nativo.
    -------------------------------------------------------------------- */
-const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time) => lenis.raf(time * 1000));
-gsap.ticker.lagSmoothing(0);
+if (typeof Lenis !== 'undefined') {
+  const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+} else {
+  console.warn('Lenis no cargó (CDN); usando scroll nativo.');
+}
